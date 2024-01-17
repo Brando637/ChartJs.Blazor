@@ -1,0 +1,50 @@
+﻿@page "/simplebar"
+
+@using ChartJs.Blazor
+@using ChartJs.Blazor.BarChart
+@using ChartJs.Blazor.Common
+@using ChartJs.Blazor.Common.Enums
+
+<PageTitle>Simple Bar Chart</PageTitle>
+
+<div class="d-flex flex-column align-items-center">
+    <Chart Config="_barConfig" @ref="_chart"></Chart>
+</div>
+
+@code {
+    private BarConfig? _barConfig;
+    private Chart _chart;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _barConfig = new BarConfig
+        {
+            Options = new BarOptions
+            {
+                Responsive = true,
+                Legend = new Legend
+                {
+                    Position = Position.Top
+                },
+                Title = new OptionsTitle
+                {
+                    Display = true,
+                    Text = "ChartJs.Blazor Bar Chart"
+                }
+            }
+        };
+        int[] randomData = { 23, 4, 46, 16, 32, 18, 27 };
+        string[] randomLabels = { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
+
+        IDataset<int> dataset = new BarDataset<int>(randomData, false)
+        {
+           BackgroundColor = "#50BBE2",
+           BorderColor = "#4192B7",
+           BorderWidth = 1,
+           Label = "Day of the week"
+        };
+
+        _barConfig.Data.XLabels.AddRange(randomLabels);
+        _barConfig.Data.Datasets.Add(dataset);
+    }
+}

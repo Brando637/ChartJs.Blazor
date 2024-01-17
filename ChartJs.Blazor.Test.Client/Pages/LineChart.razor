@@ -1,0 +1,80 @@
+﻿@page "/linechart"
+@using ChartJs.Blazor.LineChart
+@using ChartJs.Blazor.Common
+@using ChartJs.Blazor.Common.Enums
+@using ChartJs.Blazor.Common.Axes
+@using ChartJs.Blazor.Util
+
+<PageTitle>Line Chart</PageTitle>
+
+<h1>Line Chart</h1>
+<div class="d-flex flex-column align-items-center">
+    <Chart Config="_lineConfig" @ref="_chart"></Chart>
+</div>
+@code {
+    // Chart Config
+    private LineConfig? _lineConfig;
+    private Chart? _chart;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _lineConfig = new LineConfig
+        {
+            Options = new LineOptions
+            {
+                Responsive = true,
+                Title = new OptionsTitle
+                {
+                    Display = true,
+                    Text = "ChartJs.Blazor Line Chart"
+                },
+                Tooltips = new Tooltips
+                {
+                    Mode = InteractionMode.Nearest,
+                    Intersect = true
+                },
+                Hover = new Hover
+                {
+                    Mode = InteractionMode.Nearest,
+                    Intersect = true
+                },
+                Scales = new Scales
+                {
+                    XAxes = new List<CartesianAxis>
+                    {
+                        new CategoryAxis
+                        {
+                            ScaleLabel = new ScaleLabel
+                            {
+                                LabelString = "Month"
+                            }
+                        }
+                    },
+                    YAxes = new List<CartesianAxis>
+                    {
+                        new LinearCartesianAxis
+                        {
+                            ScaleLabel = new ScaleLabel
+                            {
+                                LabelString = "Value"
+                            }
+                        }
+                    }
+                }
+            }
+        };
+        int[] randomData = { 1, 3, 4, 2, 3, 8, 4 };
+        string[] randomLabels = { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
+
+        IDataset<int> dataset = new LineDataset<int>(randomData)
+        {
+            Label = "Sample Dataset",
+            BackgroundColor = "#50BBE2",
+            BorderColor = "#4192B7",
+            Fill = FillingMode.Start
+        };
+
+        _lineConfig.Data.Labels.AddRange(randomLabels);
+        _lineConfig.Data.Datasets.Add(dataset);
+    }
+}

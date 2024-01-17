@@ -1,0 +1,85 @@
+﻿@page "/stackedbar"
+@using ChartJs.Blazor.BarChart
+@using ChartJs.Blazor.BarChart.Axes
+@using ChartJs.Blazor.Common
+@using ChartJs.Blazor.Common.Axes
+@using ChartJs.Blazor.Common.Enums
+
+<PageTitle>Stacked Bar Chart</PageTitle>
+
+<h1>Stacked Bar Chart</h1>
+
+<div class="d-flex flex-column align-items-center">
+    <Chart Config="_barConfig" @ref="_chart"></Chart>
+</div>
+@code {
+    private BarConfig? _barConfig;
+    private Chart? _chart;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _barConfig = new BarConfig
+        {
+            Options = new BarOptions
+            {
+                Responsive = true,
+                Title = new OptionsTitle
+                {
+                    Display = true,
+                    Text = "Chart.Js Bar Chart - Stacked"
+                },
+                Tooltips = new Tooltips
+                {
+                    Mode = InteractionMode.Nearest,
+                    Intersect = false
+                },
+                Scales = new BarScales
+                {
+                    XAxes = new List<CartesianAxis>
+                    {
+                        new BarCategoryAxis
+                        {
+                            Stacked = true
+                        }
+                    },
+                    YAxes = new List<CartesianAxis>
+                    {
+                        new BarLinearCartesianAxis
+                        {
+                            Stacked = true
+                        }
+                    }
+                }
+            }
+        };
+
+        int[] randomDataOne = { 5, 6, 3, 4, 7, 2, 9};
+        int[] randomDataTwo = { 8, 5, 4, 8, 3, 4, 6};
+        int[] randomDataThree = { 3, 4, 2, 6, 5, 9, 7};
+
+        IDataset<int> datasetOne = new BarDataset<int>(randomDataOne, false)
+        {
+            Label = "Dataset 1",
+            BackgroundColor = "#93D6ED"
+        };
+
+        IDataset<int> datasetTwo = new BarDataset<int>(randomDataTwo, false)
+        {
+            Label = "Dataset 2",
+            BackgroundColor = "#50BBE2"
+        };
+
+        IDataset<int> datasetThree = new BarDataset<int>(randomDataThree, false)
+        {
+            Label = "Dataset 3",
+            BackgroundColor = "#4192B7"
+        };
+
+        string[] randomLabels = { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
+
+        _barConfig.Data.XLabels.AddRange(randomLabels);
+        _barConfig.Data.Datasets.Add(datasetThree);
+        _barConfig.Data.Datasets.Add(datasetTwo);
+        _barConfig.Data.Datasets.Add(datasetOne);
+    }
+}
